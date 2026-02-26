@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Анкета ShopEasy</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #161a22;
+    --card: #1c2130;
+    --border: #2a3047;
+    --accent: #f0c060;
+    --accent2: #e87040;
+    --text: #eef0f6;
+    --muted: #7a849e;
+    --success: #4ade80;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Welcome page */
+  .welcome-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .welcome-page.hidden { display: none; }
+  .survey-wrapper { display: none; }
+  .survey-wrapper.visible { display: block; }
+  .welcome-inner {
+    max-width: 680px;
+    width: 100%;
+    animation: fadeDown 0.8s ease both;
+  }
+  .welcome-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+  .welcome-logo-icon {
+    width: 52px;
+    height: 52px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+  }
+  .welcome-logo-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.7rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .welcome-greeting {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    background: linear-gradient(120deg, var(--text) 0%, rgba(238,240,246,0.65) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .welcome-intro {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.8;
+    margin-bottom: 28px;
+  }
+  .welcome-intro strong { color: var(--text); }
+  .welcome-block {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 26px 30px;
+    margin-bottom: 16px;
+  }
+  .welcome-block-title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .welcome-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+  }
+  .welcome-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.93rem;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .welcome-list li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+  .prize-list { display: flex; flex-direction: column; gap: 10px; }
+  .prize-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 0.9rem;
+  }
+  .prize-icon { font-size: 1.4rem; flex-shrink: 0; }
+  .prize-text { color: var(--text); line-height: 1.4; }
+  .prize-text small { display: block; color: var(--muted); font-size: 0.78rem; margin-top: 2px; }
+  .anon-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(74,222,128,0.08);
+    border: 1px solid rgba(74,222,128,0.2);
+    color: #4ade80;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+  }
+  .welcome-cta {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 32px;
+  }
+  .btn-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 17px 38px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #0d0f14;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 6px 28px rgba(240,192,96,0.3);
+    transition: all 0.25s ease;
+    outline: none;
+  }
+  .btn-cta:hover { transform: translateY(-3px); box-shadow: 0 10px 36px rgba(240,192,96,0.42); }
+  .btn-cta:active { transform: translateY(0); }
+  .cta-time { color: var(--muted); font-size: 0.85rem; display: flex; align-items: center; gap: 6px; }
+  .welcome-footer {
+    color: var(--muted);
+    font-size: 0.83rem;
+    margin-top: 24px;
+    line-height: 1.65;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+  .divider-line {
+    height: 1px;
+    background: var(--border);
+    margin: 4px 0 16px;
+  }
+
+  /* Background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(240,192,96,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 80% 80%, rgba(232,112,64,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 50% 50%, rgba(26,35,60,0.6) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 60px;
+    animation: fadeDown 0.7s ease both;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    -webkit-text-fill-color: initial;
+    flex-shrink: 0;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 16px;
+    background: linear-gradient(120deg, var(--text) 0%, var(--muted) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 24px;
+  }
+
+  .prize-banner {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, rgba(240,192,96,0.12), rgba(232,112,64,0.12));
+    border: 1px solid rgba(240,192,96,0.25);
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-size: 0.85rem;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Progress */
+  .progress-wrap {
+    margin-bottom: 40px;
+    animation: fadeDown 0.7s 0.1s ease both;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 10px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 0%;
+  }
+
+  /* Steps */
+  .step {
+    display: none;
+    animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+  .step.active { display: block; }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Question card */
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+
+  .q-label {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(240,192,96,0.15), rgba(232,112,64,0.15));
+    border: 1px solid rgba(240,192,96,0.3);
+    color: var(--accent);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 100px;
+    margin-bottom: 14px;
+  }
+
+  .q-text {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.5;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+
+  .q-hint {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 20px;
+    margin-top: -16px;
+  }
+
+  /* Radio / Checkbox options */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+  }
+
+  .option:hover {
+    border-color: rgba(240,192,96,0.4);
+    background: rgba(240,192,96,0.04);
+  }
+
+  .option.selected {
+    border-color: var(--accent);
+    background: rgba(240,192,96,0.07);
+  }
+
+  .option input {
+    display: none;
+  }
+
+  .option-indicator {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .option-indicator.checkbox {
+    border-radius: 6px;
+  }
+
+  .option.selected .option-indicator {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .option.selected .option-indicator::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: var(--bg);
+    border-radius: 50%;
+  }
+
+  .option.selected .option-indicator.checkbox::after {
+    content: '✓';
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--bg);
+    border-radius: 0;
+    width: auto;
+    height: auto;
+    background: none;
+  }
+
+  .option-text {
+    font-size: 0.93rem;
+    line-height: 1.45;
+    color: var(--text);
+  }
+
+  /* Text input */
+  .text-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 18px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.93rem;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .text-input:focus {
+    border-color: var(--accent);
+  }
+
+  .text-input::placeholder {
+    color: var(--muted);
+  }
+
+  /* Rating stars */
+  .rating {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .rating-item {
+    flex: 1;
+    min-width: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 12px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .rating-item:hover {
+    border-color: rgba(240,192,96,0.4);
+    transform: translateY(-2px);
+  }
+
+  .rating-item.selected {
+    border-color: var(--accent);
+    background: rgba(240,192,96,0.07);
+  }
+
+  .rating-emoji { font-size: 1.6rem; }
+  .rating-label { font-size: 0.78rem; color: var(--muted); font-weight: 500; }
+  .rating-item.selected .rating-label { color: var(--accent); }
+
+  /* Navigation */
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-top: 12px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.93rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    outline: none;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #0d0f14;
+    box-shadow: 0 4px 20px rgba(240,192,96,0.25);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px rgba(240,192,96,0.35);
+  }
+
+  .btn-secondary {
+    background: var(--surface);
+    color: var(--muted);
+    border: 1.5px solid var(--border);
+  }
+
+  .btn-secondary:hover {
+    color: var(--text);
+    border-color: var(--muted);
+  }
+
+  .btn:disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
+
+  /* Error */
+  .error-msg {
+    color: #f87171;
+    font-size: 0.82rem;
+    margin-top: 10px;
+    display: none;
+    align-items: center;
+    gap: 6px;
+  }
+  .error-msg.show { display: flex; }
+
+  /* Thank you screen */
+  .thankyou {
+    text-align: center;
+    padding: 60px 20px;
+    animation: slideIn 0.5s ease both;
+  }
+
+  .thankyou-icon {
+    font-size: 4rem;
+    margin-bottom: 24px;
+    display: block;
+  }
+
+  .thankyou h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    margin-bottom: 16px;
+    background: linear-gradient(120deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .thankyou p {
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 440px;
+    margin: 0 auto 32px;
+  }
+
+  .ticket {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--card);
+    border: 1px dashed rgba(240,192,96,0.4);
+    border-radius: var(--radius);
+    padding: 24px 40px;
+    margin-bottom: 32px;
+  }
+
+  .ticket-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  .ticket-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 4px;
+  }
+
+  /* Summary */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  .summary-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .summary-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .summary-lbl {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* Inline text */
+  .inline-other {
+    margin-top: 10px;
+    display: none;
+  }
+
+  .inline-other.show { display: block; }
+
+  .inline-input {
+    width: 100%;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 11px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .inline-input:focus { border-color: var(--accent); }
+  .inline-input::placeholder { color: var(--muted); }
+
+  /* Address form */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  @media (max-width: 500px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .rating { gap: 6px; }
+    .rating-item { min-width: 60px; padding: 12px 8px; }
+    .rating-emoji { font-size: 1.3rem; }
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .form-group.full { grid-column: 1 / -1; }
+
+  .form-label {
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .form-input {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .form-input:focus { border-color: var(--accent); }
+  .form-input::placeholder { color: var(--muted); }
+
+  .optional-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 100px;
+    margin-left: 8px;
+  }
+</style>
+</head>
+<body>
+
+<!-- WELCOME PAGE -->
+<div class="welcome-page" id="welcomePage">
+  <div class="welcome-inner">
+
+    <div class="welcome-logo">
+      <div class="welcome-logo-icon">🛍</div>
+      <div class="welcome-logo-text">ShopEasy</div>
+    </div>
+
+    <h1 class="welcome-greeting">Шановний покупцю!</h1>
+
+    <p class="welcome-intro">
+      Ми — команда онлайн-магазину <strong>«ShopEasy»</strong> — дбаємо про те, щоб ваші покупки були максимально зручними, швидкими та приємними. Щоб ми могли стати ще кращими, просимо вас витратити <strong>5–7 хвилин</strong> і заповнити цю анкету.
+    </p>
+
+    <div class="welcome-block">
+      <div class="welcome-block-title">Ваші відповіді допоможуть нам</div>
+      <ul class="welcome-list">
+        <li>Покращити асортимент та якість товарів</li>
+        <li>Вдосконалити зручність та функціональність сайту</li>
+        <li>Оптимізувати терміни та умови доставки</li>
+        <li>Розробити вигідніші акції та програми лояльності</li>
+      </ul>
+    </div>
+
+    <div class="welcome-block">
+      <div class="welcome-block-title">🎁 Розіграш призів серед учасників</div>
+      <div class="prize-list">
+        <div class="prize-item">
+          <div class="prize-icon">🥇</div>
+          <div class="prize-text">
+            1-е місце — подарунковий сертифікат на 1000 грн
+          </div>
+        </div>
+        <div class="prize-item">
+          <div class="prize-icon">🥈🥉</div>
+          <div class="prize-text">
+            2-е та 3-є місця — знижка 15% на наступну покупку
+          </div>
+        </div>
+        <div class="prize-item">
+          <div class="prize-icon">🎀</div>
+          <div class="prize-text">
+            10 випадкових учасників отримають фірмові сувеніри від ShopEasy
+            <small>Результати лотереї — через 2 тижні у наших соцмережах</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="anon-badge">
+      🔒 Анкетування є анонімним — ваші дані не передаються третім особам
+    </div>
+
+    <div class="welcome-cta">
+      <button class="btn-cta" onclick="startSurvey()">
+        Розпочати анкету →
+      </button>
+      <div class="cta-time">⏱ Займе лише 5–7 хвилин</div>
+    </div>
+
+    <div class="welcome-footer">
+      Дякуємо за вашу участь та довіру!<br>
+      <strong style="color: var(--text);">З повагою, команда ShopEasy</strong>
+    </div>
+
+  </div>
+</div>
+
+<!-- SURVEY WRAPPER -->
+<div class="survey-wrapper" id="surveyWrapper">
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">🛍</div>
+      ShopEasy
+    </div>
+    <h1>Ваша думка важлива для нас</h1>
+    <p>Відповідайте чесно — це допоможе нам стати кращими для вас.</p>
+  </div>
+
+  <!-- Progress -->
+  <div class="progress-wrap">
+    <div class="progress-header">
+      <span id="progressLabel">Питання 1 з 12</span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <!-- Steps -->
+
+  <!-- Step 1 -->
+  <div class="step active" id="step-1">
+    <div class="question-card">
+      <div class="q-label">Питання 1</div>
+      <div class="q-text">Як часто ви здійснюєте покупки в онлайн-магазинах?</div>
+      <div class="options" id="q1">
+        <label class="option"><input type="radio" name="q1" value="Щодня"><div class="option-indicator"></div><span class="option-text">Щодня</span></label>
+        <label class="option"><input type="radio" name="q1" value="Кілька разів на тиждень"><div class="option-indicator"></div><span class="option-text">Кілька разів на тиждень</span></label>
+        <label class="option"><input type="radio" name="q1" value="Кілька разів на місяць"><div class="option-indicator"></div><span class="option-text">Кілька разів на місяць</span></label>
+        <label class="option"><input type="radio" name="q1" value="Кілька разів на рік"><div class="option-indicator"></div><span class="option-text">Кілька разів на рік</span></label>
+        <label class="option"><input type="radio" name="q1" value="Вперше роблю покупку онлайн"><div class="option-indicator"></div><span class="option-text">Вперше роблю покупку онлайн</span></label>
+      </div>
+      <div class="error-msg" id="err-1">⚠ Будь ласка, оберіть відповідь</div>
+    </div>
+    <div class="nav">
+      <div></div>
+      <button class="btn btn-primary" onclick="nextStep(1)">Далі →</button>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="step" id="step-2">
+    <div class="question-card">
+      <div class="q-label">Питання 2</div>
+      <div class="q-text">Які товарні категорії ви найчастіше купуєте?</div>
+      <div class="q-hint">Оберіть до 3 варіантів</div>
+      <div class="options" id="q2">
+        <label class="option"><input type="checkbox" name="q2" value="Одяг та взуття"><div class="option-indicator checkbox"></div><span class="option-text">Одяг та взуття</span></label>
+        <label class="option"><input type="checkbox" name="q2" value="Електроніка та гаджети"><div class="option-indicator checkbox"></div><span class="option-text">Електроніка та гаджети</span></label>
+        <label class="option"><input type="checkbox" name="q2" value="Товари для дому та інтер'єру"><div class="option-indicator checkbox"></div><span class="option-text">Товари для дому та інтер'єру</span></label>
+        <label class="option"><input type="checkbox" name="q2" value="Косметика та засоби догляду"><div class="option-indicator checkbox"></div><span class="option-text">Косметика та засоби догляду</span></label>
+        <label class="option"><input type="checkbox" name="q2" value="Книги та канцтовари"><div class="option-indicator checkbox"></div><span class="option-text">Книги та канцтовари</span></label>
+        <label class="option"><input type="checkbox" name="q2" value="Продукти харчування"><div class="option-indicator checkbox"></div><span class="option-text">Продукти харчування</span></label>
+        <label class="option" id="q2-other-opt"><input type="checkbox" name="q2" value="Інше"><div class="option-indicator checkbox"></div><span class="option-text">Інше</span></label>
+        <div class="inline-other" id="q2-other-field">
+          <input class="inline-input" type="text" id="q2-other-text" placeholder="Вкажіть вашу категорію...">
+        </div>
+      </div>
+      <div class="error-msg" id="err-2">⚠ Будь ласка, оберіть хоча б одну відповідь</div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prevStep(2)">← Назад</button>
+      <button class="btn btn-primary" onclick="nextStep(2)">Далі →</button>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="step" id="step-3">
+    <div class="question-card">
+      <div class="q-label">Питання 3</div>
+      <div class="q-text">Звідки ви дізналися про ShopEasy?</div>
+      <div class="options" id="q3">
+        <label class="option"><input type="radio" name="q3" value="Реклама в соціальних мережах"><div class="option-indicator"></div><span class="option-text">Реклама в соціальних мережах (Facebook, Instagram, TikTok)</span></label>
+        <label class="option"><input type="radio" name="q3" value="Пошукові системи"><div class="option-indicator"></div><span class="option-text">Пошукові системи (Google, Bing)</span></label>
+        <label class="option"><input type="radio" name="q3" value="Рекомендації друзів"><div class="option-indicator"></div><span class="option-text">Рекомендації друзів або знайомих</span></label>
+        <label class="option"><input type="radio" name="q3" value="Реклама на інших сайтах"><div class="option-indicator"></div><span class="option-text">Реклама на інших сайтах</span></label>
+        <label class="option"><input type="radio" name="q3" value="Email-розсилка"><div class="option-indicator"></div><span class="option-text">Email-розсилка</span></label>
+        <label class="option" id="q3-other-opt"><input type="radio" name="q3" value="Інше"><div class="option-indicator"></div><span class="option-text">Інше</span></label>
+        <div class="inline-other" id="q3-other-field">
+          <input class="inline-input" type="text" id="q3-other-text" placeholder="Вкажіть джерело...">
+        </div>
+      </div>
+      <div class="error-msg" id="err-3">⚠ Будь ласка, оберіть відповідь</div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prevStep(3)">← Назад</button>
+      <button class="btn btn-primary" onclick="nextStep(3)">Далі →</button>
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="step" id="step-4">
+    <div class="question-card">
+      <div class="q-label">Питання 4</div>
+      <div class="q-text">Оцініть зручність навігації на нашому сайті</div>
+      <div class="rating" id="q4">
+        <div class="rating-item" onclick="selectRating('q4', '😫', 'Дуже незручно')">
+          <span class="rating-emoji">😫</span>
+          <span class="rating-label">Дуже незручно</span>
+        </div>
+        <div class="rating-item" onclick="selectRating('q4', '😕', 'Незручно')">
+          <span class="rating-emoji">😕</span>
+          <span class="rating-label">Незручно</span>
+        </div>
+        <div class="rating-item" onclick="selectRating('q4', '😐', 'Задовільно')">
+          <span class="rating-emoji">😐</span>
+          <span class="rating-label">Задовільно</span>
+        </div>
+        <div class="rating-item" onclick="selectRating('q4', '🙂', 'Зручно')">
+          <span class="rating-emoji">🙂</span>
+          <span class="rating-label">Зручно</span>
+        </div>
+        <div class="rating-item" onclick="selectRating('q4', '😍', 'Дуже зручно')">
+          <span class="rating-emoji">😍</span>
+          <span class="rating-label">Дуже зручно</span>
+        </div>
+      </div>
+      <div class="error-msg" id="err-4">⚠ Будь ласка, оцініть зручність</div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prevStep(4)">← Назад</button>
+      <button class="btn btn-primary" onclick="nextStep(4)">Далі →</button>
+    </div>
+  </div>
+
+  <!-- Step 5 -->
+  <div class="step" id="step-5">
+    <div class="question-card">
+      <div class="q-label">Питання 5</div>
+      <div class="q-text">Оцініть якість нашої служби підтримки</div>
+      <div class="options" id="q5">
+        <label class="option"><input type="radio" name="q5" value="Відмінно"><div class="option-indicator"></div><span class="option-text">Відмінно 🌟</span></label>
+        <label class="option"><input type="radio" name="q5" value="Добре"><div class="option-indicator"></div><span class="option-text">Добре 👍</span></label>
+        <label class="option"><input type="radio" name="q5" value="Задовільно"><div class="option-indicator"></div><span class="option-text">Задовільно 🤔</span></label>
+        <label class="option"><input type="radio" name="q5" value="Погано"><div class="option-indicator"></div><span class="option-text">Погано 👎</span></label>
+        <label class="option"><input type="radio" name="q5" value="Не звертався"><div class="option-indicator"></div><span class="option-text">Не звертався до служби підтримки</span></label>
+      </div>
+      <div class="error-msg" id="err-5">⚠ Будь ласка, оберіть відповідь</div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prevStep(5)">← Назад</button>
+      <button class="btn btn-primary" onclick="nextStep(5)">Далі →</button>
+    </div>
+  </div>
+
+  <!-- Step 6 -->
+  <div class="step" id="step-6">
+    <div class="question-card">
+      <div class="q-label">Питання 6</div>
+      <div class="q-text">Наскільки ви задоволені умовами та термінами доставки?</div>
+      <div class="rating" id="q6">
+        <div class="rating-item" onclick="selectRating('q6', '😠', 'Зовсім незадоволений')">
+          <span class="rating-emoji">😠</span>
+          <span class="rating-label">Зовсім ні</span>
+        </div>
+        <div class="rating-item" onclick="selectRating('q6', '😞', 'Здебільшого ні')">
+          <span class="rating-emoji">😞</span>
+          <span class="rating-label">Здебільшого ні</span>
+        </div>
+        <div class="rating-item" onclick="selectRating('q6', '😐', 'Нейтрально')">
+          <span class="rating-emoji">😐</span>
+          <span class="rating-label">Нейтрально</span>
+        </div>
+        <div class="rating-item" onclick="selectRating('q6', '😊', 'Здебільшого так')">
+          <span class="rating-emoji">😊</span>
+          <span class="rating-label">Здебільшого так</span>
+        </div>
+        <div class="rating-item" onclick="selectRating('q6', '🥰', 'Повністю задоволений')">
+          <span class="rating-emoji">🥰</span>
+          <span class="rating-label">Повністю</span>
+        </div>
+      </div>
+      <div class="error-msg" id="err-6">⚠ Будь ласка, оцініть доставку</div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prevStep(6)">← Назад</button>
+      <button class="btn btn-primary" onclick="nextStep(6)">Далі →</button>
+    </div>
+  </div>
+
+  <!-- Step 7 -->
+  <div class="step" id="step-7">
+    <div class="question-card">
+      <div class="q-label">Питання 7</div>
+      <div class="q-text">Які методи оплати ви зазвичай використовуєте?</div>
+      <div class="q-hint">Оберіть усі відповідні варіанти</div>
+      <div class="options" id="q7">
+        <label class="option"><input type="checkbox" name="q7" value="Банківська картка онлайн"><div class="option-indicator checkbox"></div><span class="option-text">Банківська картка онлайн 💳</span></label>
+        <label class="option"><input type="checkbox" name="q7" value="Накладений платіж"><div class="option-indicator checkbox"></div><span class="option-text">Накладений платіж (оплата при отриманні) 📦</span></label>
+        <label class="option"><input type="checkbox" name="q7" value="Мобільний банкінг"><div class="option-indicator checkbox"></div><span class="option-text">Мобільний банкінг (Monobank, PrivatBank) 📱</span></label>
+        <label class="option"><input type="checkbox" name="q7" value="Google/Apple Pay"><div class="option-indicator checkbox"></div><span class="option-text">Google Pay / Apple Pay ⚡</span></label>
+        <label class="option"><input type="checkbox" name="q7" value="Готівка кур'єру"><div class="option-indicator checkbox"></div><span class="option-text">Готівка кур'єру 💵</span></label>
+      </div>
+      <div class="error-msg" id="err-7">⚠ Будь ласка, оберіть хоча б один варіант</div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prevStep(7)">← Назад</button>
+      <button class="btn btn-primary" onclick="nextStep(7)">Далі →</button>
+    </div>
+  </div>
+
+  <!-- Step 8 -->
+  <div class="step" id="step-8">
+    <div class="question-card">
+      <div class="q-label">Питання 8</div>
+      <div class="q-text">Чи користувалися ви нашою програмою лояльності або акціями?</div>
+      <div class="options" id="q8">
+        <label class="option"><input type="radio" name="q8" value="Так, сподобалось"><div class="option-indicator"></div><span class="option-text">Так, і вони мені сподобались 🎉</span></label>
+        <label class="option"><input type="radio" name="q8" value="Так, умови не вигідні"><div class="option-indicator"></div><span class="option-text">Так, але умови не надто вигідні</span></label>
+        <label class="option"><input type="radio" name="q8" value="Ні, хотів би"><div class="option-indicator"></div><span class="option-text">Ні, але хотів/хотіла б скористатись</span></label>
+        <label class="option"><input type="radio" name="q8" value="Ні, не цікаво"><div class="option-indicator"></div><span class="option-text">Ні, і мене це не цікавить</span></label>
+      </div>
+      <div class="error-msg" id="err-8">⚠ Будь ласка, оберіть відповідь</div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prevStep(8)">← Назад</button>
+      <button class="btn btn-primary" onclick="nextStep(8)">Далі →</button>
+    </div>
+  </div>
+
+  <!-- Step 9 -->
+  <div class="step" id="step-9">
+    <div class="question-card">
+      <div class="q-label">Питання 9</div>
+      <div class="q-text">Що найбільше приваблює вас при виборі онлайн-магазину?</div>
+      <div class="q-hint">Оберіть до 3 головних чинників</div>
+      <div class="options" id="q9">
+        <label class="option"><input type="checkbox" name="q9" value="Ціна товарів"><div class="option-indicator checkbox"></div><span class="option-text">Ціна товарів</span></label>
+        <label class="option"><input type="checkbox" name="q9" value="Широкий асортимент"><div class="option-indicator checkbox"></div><span class="option-text">Широкий асортимент</span></label>
+        <label class="option"><input type="checkbox" name="q9" value="Зручність оформлення"><div class="option-indicator checkbox"></div><span class="option-text">Зручність та швидкість оформлення замовлення</span></label>
+        <label class="option"><input type="checkbox" name="q9" value="Надійна доставка"><div class="option-indicator checkbox"></div><span class="option-text">Надійна та швидка доставка</span></label>
+        <label class="option"><input type="checkbox" name="q9" value="Якість обслуговування"><div class="option-indicator checkbox"></div><span class="option-text">Якість обслуговування</span></label>
+        <label class="option"><input type="checkbox" name="q9" value="Репутація та відгуки"><div class="option-indicator checkbox"></div><span class="option-text">Репутація магазину та відгуки покупців</span></label>
+        <label class="option"><input type="checkbox" name="q9" value="Програми лояльності"><div class="option-indicator checkbox"></div><span class="option-text">Програми лояльності та знижки</span></label>
+        <label class="option"><input type="checkbox" name="q9" value="Повернення товару"><div class="option-indicator checkbox"></div><span class="option-text">Можливість повернення товару</span></label>
+        <label class="option"><input type="checkbox" name="q9" value="Безпека платежів"><div class="option-indicator checkbox"></div><span class="option-text">Безпека платежів</span></label>
+      </div>
+      <div class="error-msg" id="err-9">⚠ Будь ласка, оберіть хоча б один варіант</div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prevStep(9)">← Назад</button>
+      <button class="btn btn-primary" onclick="nextStep(9)">Далі →</button>
+    </div>
+  </div>
+
+  <!-- Step 10 -->
+  <div class="step" id="step-10">
+    <div class="question-card">
+      <div class="q-label">Питання 10</div>
+      <div class="q-text">Що вам найбільше <em style="color:var(--accent2)">не</em> подобається в нашому магазині?</div>
+      <textarea class="text-input" id="q10" placeholder="Ваша відповідь допоможе нам покращитись..."></textarea>
+      <div class="error-msg" id="err-10">⚠ Будь ласка, напишіть відповідь</div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prevStep(10)">← Назад</button>
+      <button class="btn btn-primary" onclick="nextStep(10)">Далі →</button>
+    </div>
+  </div>
+
+  <!-- Step 11 -->
+  <div class="step" id="step-11">
+    <div class="question-card">
+      <div class="q-label">Питання 11</div>
+      <div class="q-text">Чи є у вас пропозиції щодо покращення роботи магазину?</div>
+      <textarea class="text-input" id="q11" placeholder="Ваші ідеї дуже цінні для нас..."></textarea>
+    </div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prevStep(11)">← Назад</button>
+      <button class="btn btn-primary" onclick="nextStep(11)">Далі →</button>
+    </div>
+  </div>
+
+  <!-- Step 12 -->
+  <div class="step" id="step-12">
+    <div class="question-card">
+      <div class="q-label">Питання 12</div>
+      <div class="q-text">Чи рекомендували б ви ShopEasy своїм друзям та знайомим?</div>
+      <div class="options" id="q12">
+        <label class="option"><input type="radio" name="q12" value="Так, однозначно"><div class="option-indicator"></div><span class="option-text">Так, однозначно 🚀</span></label>
+        <label class="option"><input type="radio" name="q12" value="Скоріше так"><div class="option-indicator"></div><span class="option-text">Скоріше так</span></label>
+        <label class="option"><input type="radio" name="q12" value="Скоріше ні"><div class="option-indicator"></div><span class="option-text">Скоріше ні</span></label>
+        <label class="option"><input type="radio" name="q12" value="Ні"><div class="option-indicator"></div><span class="option-text">Ні</span></label>
+      </div>
+      <div class="error-msg" id="err-12">⚠ Будь ласка, оберіть відповідь</div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prevStep(12)">← Назад</button>
+      <button class="btn btn-primary" onclick="nextStep(12)">Далі →</button>
+    </div>
+  </div>
+
+  <!-- Step 13 — Contact (optional) -->
+  <div class="step" id="step-13">
+    <div class="question-card">
+      <div class="q-label">Адресна частина <span class="optional-badge">необов'язково</span></div>
+      <div class="q-text">Залиште контакти для участі в лотереї</div>
+      <div class="q-hint">Заповнення цього розділу є добровільним та анонімним</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Ім'я та прізвище</label>
+          <input class="form-input" type="text" id="contact-name" placeholder="Іванченко Марія">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Місто</label>
+          <input class="form-input" type="text" id="contact-city" placeholder="Київ">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input class="form-input" type="email" id="contact-email" placeholder="example@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Телефон</label>
+          <input class="form-input" type="tel" id="contact-phone" placeholder="+38 (0XX) XXX-XX-XX">
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Стать</label>
+          <div class="options" id="q-gender" style="flex-direction:row;flex-wrap:wrap;">
+            <label class="option" style="flex:1;min-width:120px;"><input type="radio" name="gender" value="Чоловіча"><div class="option-indicator"></div><span class="option-text">Чоловіча</span></label>
+            <label class="option" style="flex:1;min-width:120px;"><input type="radio" name="gender" value="Жіноча"><div class="option-indicator"></div><span class="option-text">Жіноча</span></label>
+            <label class="option" style="flex:1;min-width:160px;"><input type="radio" name="gender" value="Не вказувати"><div class="option-indicator"></div><span class="option-text">Не вказувати</span></label>
+          </div>
+        </div>
+        <div class="form-group full">
+          <label class="form-label">Вікова група</label>
+          <div class="options" id="q-age" style="flex-direction:row;flex-wrap:wrap;">
+            <label class="option" style="flex:1;min-width:80px;"><input type="radio" name="age" value="до 18"><div class="option-indicator"></div><span class="option-text">до 18</span></label>
+            <label class="option" style="flex:1;min-width:80px;"><input type="radio" name="age" value="18–24"><div class="option-indicator"></div><span class="option-text">18–24</span></label>
+            <label class="option" style="flex:1;min-width:80px;"><input type="radio" name="age" value="25–34"><div class="option-indicator"></div><span class="option-text">25–34</span></label>
+            <label class="option" style="flex:1;min-width:80px;"><input type="radio" name="age" value="35–44"><div class="option-indicator"></div><span class="option-text">35–44</span></label>
+            <label class="option" style="flex:1;min-width:80px;"><input type="radio" name="age" value="45+"><div class="option-indicator"></div><span class="option-text">45+</span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="nav">
+      <button class="btn btn-secondary" onclick="prevStep(13)">← Назад</button>
+      <button class="btn btn-primary" onclick="submitForm()">Надіслати анкету 🎉</button>
+    </div>
+  </div>
+
+  <!-- Thank you -->
+  <div class="step" id="step-thankyou">
+    <div class="thankyou">
+      <span class="thankyou-icon">🎊</span>
+      <h2>Дякуємо за участь!</h2>
+      <p>Ваші відповіді допоможуть нам зробити ShopEasy ще кращим для вас. Результати лотереї буде оголошено в наших соціальних мережах через 2 тижні.</p>
+      <div class="ticket">
+        <div class="ticket-label">Ваш лотерейний номер</div>
+        <div class="ticket-number" id="lottery-number"></div>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="summary-num" id="sum-questions">12</div>
+          <div class="summary-lbl">відповідей надано</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-num">🎁</div>
+          <div class="summary-lbl">Ви в грі!</div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-num" id="sum-time">—</div>
+          <div class="summary-lbl">хвилин витрачено</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let currentStep = 1;
+  const totalSteps = 13;
+  const ratingAnswers = {};
+  const startTime = Date.now();
+
+  // Init option click handlers
+  document.querySelectorAll('.option').forEach(opt => {
+    opt.addEventListener('click', function() {
+      const input = this.querySelector('input');
+      if (!input) return;
+
+      if (input.type === 'radio') {
+        // Deselect all in group
+        const name = input.name;
+        document.querySelectorAll(`input[name="${name}"]`).forEach(i => {
+          i.closest('.option').classList.remove('selected');
+        });
+        input.checked = true;
+        this.classList.add('selected');
+        hideError(name.replace('q', 'err-'));
+      } else {
+        // Checkbox
+        const name = input.name;
+        const maxSelect = name === 'q2' || name === 'q9' ? 3 : 99;
+        const checked = document.querySelectorAll(`input[name="${name}"]:checked`);
+
+        if (!input.checked) {
+          // Allow checking
+          if (checked.length < maxSelect) {
+            input.checked = true;
+            this.classList.add('selected');
+          } else {
+            // Flash limit
+            this.style.borderColor = '#f87171';
+            setTimeout(() => this.style.borderColor = '', 600);
+            return;
+          }
+        } else {
+          input.checked = false;
+          this.classList.remove('selected');
+        }
+
+        hideError(name.replace('q', 'err-'));
+      }
+
+      // Handle "Інше" show/hide
+      const id = input.closest('.option').id;
+      if (id === 'q2-other-opt' || id === 'q3-other-opt') {
+        const num = id[1];
+        const field = document.getElementById(`q${num}-other-field`);
+        const inp = input.type === 'radio' ? input.checked : input.checked;
+        field.classList.toggle('show', inp);
+      }
+    });
+  });
+
+  function selectRating(qId, emoji, label) {
+    const container = document.getElementById(qId);
+    container.querySelectorAll('.rating-item').forEach(el => el.classList.remove('selected'));
+    event.currentTarget.classList.add('selected');
+    ratingAnswers[qId] = label;
+    hideError('err-' + qId.replace('q', ''));
+  }
+
+  function hideError(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('show');
+  }
+
+  function showError(id) {
+    const el = document.getElementById(id);
+    if (el) el.classList.add('show');
+  }
+
+  function validate(step) {
+    // Radio questions
+    const radioQs = [1, 3, 5, 8, 12];
+    if (radioQs.includes(step)) {
+      const checked = document.querySelector(`input[name="q${step}"]:checked`);
+      if (!checked) { showError(`err-${step}`); return false; }
+    }
+
+    // Checkbox questions
+    const checkQs = [2, 7, 9];
+    if (checkQs.includes(step)) {
+      const checked = document.querySelectorAll(`input[name="q${step}"]:checked`);
+      if (checked.length === 0) { showError(`err-${step}`); return false; }
+    }
+
+    // Rating questions
+    if (step === 4 || step === 6) {
+      if (!ratingAnswers[`q${step}`]) { showError(`err-${step}`); return false; }
+    }
+
+    // Text required
+    if (step === 10) {
+      const val = document.getElementById('q10').value.trim();
+      if (!val) { showError('err-10'); return false; }
+    }
+
+    return true;
+  }
+
+  function nextStep(current) {
+    if (!validate(current)) return;
+    goTo(current + 1);
+  }
+
+  function prevStep(current) {
+    goTo(current - 1);
+  }
+
+  function goTo(n) {
+    document.getElementById(`step-${currentStep}`)?.classList.remove('active');
+    currentStep = n;
+
+    if (n > totalSteps) {
+      return;
+    }
+
+    const el = document.getElementById(`step-${n}`);
+    if (el) {
+      el.classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      updateProgress();
+    }
+  }
+
+  function updateProgress() {
+    const pct = Math.round(((currentStep - 1) / totalSteps) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressPct').textContent = pct + '%';
+    document.getElementById('progressLabel').textContent = `Питання ${currentStep} з ${totalSteps}`;
+  }
+
+  function submitForm() {
+    // Generate lottery number
+    const num = 'SE-' + Math.floor(10000 + Math.random() * 90000);
+    document.getElementById('lottery-number').textContent = num;
+
+    // Time
+    const mins = Math.max(1, Math.round((Date.now() - startTime) / 60000));
+    document.getElementById('sum-time').textContent = mins;
+
+    // Hide progress
+    document.querySelector('.progress-wrap').style.opacity = '0';
+
+    goTo('thankyou');
+
+    const step = document.getElementById('step-thankyou');
+    step.classList.add('active');
+
+    // Scroll top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Update option state for gender/age in address step
+  document.querySelectorAll('#q-gender input, #q-age input').forEach(inp => {
+    inp.addEventListener('change', function() {
+      document.querySelectorAll(`input[name="${this.name}"]`).forEach(i => {
+        i.closest('.option').classList.toggle('selected', i.checked);
+      });
+    });
+  });
+
+  function startSurvey() {
+    const wp = document.getElementById('welcomePage');
+    const sw = document.getElementById('surveyWrapper');
+    wp.style.opacity = '0';
+    wp.style.transform = 'translateY(-20px)';
+    wp.style.transition = 'all 0.4s ease';
+    setTimeout(() => {
+      wp.classList.add('hidden');
+      sw.classList.add('visible');
+      sw.style.opacity = '0';
+      sw.style.transform = 'translateY(20px)';
+      sw.style.transition = 'all 0.4s ease';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          sw.style.opacity = '1';
+          sw.style.transform = 'translateY(0)';
+        });
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 380);
+  }
+
+  // Init
+  updateProgress();
+</script>
+</div><!-- /survey-wrapper -->
+</body>
+</html>
